@@ -6,6 +6,9 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Space Fighters")
 WHITE = (255, 255, 255)
 FPS = 60
+vel = 5
+SPACESHIP_HEIGHT = 40
+SPACESHIP_WIDTH = 55
 
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
     os.path.join('Assets', 'spaceship_yellow.png'))
@@ -18,15 +21,18 @@ RED_SPACESHIP = pygame.transform.rotate(
     pygame.transform.scale(RED_SPACESHIP_IMAGE, (55, 40)), 270)
 
 
-def draw_window():
+def draw_window(red, yellow):
 
     WIN.fill(WHITE)
-    WIN.blit(YELLOW_SPACESHIP, (300, 100))
-    WIN.blit(RED_SPACESHIP, (600, 100))
+    WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
+    WIN.blit(RED_SPACESHIP, (red.x, red.y))
     pygame.display.update()
 
 
 def main():
+    red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -35,7 +41,16 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
-        draw_window()
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_a]:  # left
+            yellow.x -= vel
+        if keys_pressed[pygame.K_d]:  # right
+            yellow.x += vel
+        if keys_pressed[pygame.K_w]:  # right
+            yellow.y -= vel
+        if keys_pressed[pygame.K_s]:  # right
+            yellow.y += vel
+        draw_window(red, yellow)
     pygame.quit()
 
 

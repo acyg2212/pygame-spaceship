@@ -12,6 +12,7 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
 HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
+WINNER_FONT = pygame.font.SysFont('comicsans', 100)
 
 FPS = 60
 vel = 5
@@ -103,6 +104,14 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
             red_bullets.remove(bullet)
 
 
+def draw_winner(text):
+    draw_text = WINNER_FONT.render(text, 1, WHITE)
+    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width() /
+                         2, HEIGHT/2 - draw_text.get_height()/2))
+    pygame.display.update()
+    pygame.time.delay(5000)
+
+
 def main():
     red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -120,6 +129,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_TAB and len(yellow_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(
@@ -141,7 +151,8 @@ def main():
         if YELLOW_HEALTH <= 0:
             winner_text = "Red Wins!"
         if winner_text != "":
-            pass
+            draw_winner(winner_text)
+            break
 
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
@@ -151,7 +162,7 @@ def main():
 
         draw_window(red, yellow, red_bullets, yellow_bullets,
                     RED_HEALTH, YELLOW_HEALTH)
-    pygame.quit()
+    main()
 
 
 if __name__ == "__main__":
